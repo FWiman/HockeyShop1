@@ -325,28 +325,24 @@ namespace HockeyShop1
         /// <returns></returns>
         public static int RemoveProductFromCart(int removeFromCart)
         {
-            using (var db = new Models.HockeyShop1Context())
+            int affectedRows = 0;
+            var sql = $"DELETE FROM [Shoppin Cart] WHERE Id = {removeFromCart}";
+
+            using (var connection = new SqlConnection(connString))
             {
-                int affectedRows = 0;
-                var removeProduct = db.ShoppinCarts;
-                var sql = $"DELETE FROM [Shoppin Cart] WHERE Id = {removeFromCart}";
-
-                using (var connection = new SqlConnection(connString))
+                try
                 {
-                    try
-                    {
-                        affectedRows = connection.Execute(sql);
+                    affectedRows = connection.Execute(sql);
 
-                    }
-                    catch (Exception e)
-                    {
-
-                        Console.WriteLine(e.Message);
-                    }
-                    Console.WriteLine($"Product removed from your cart {affectedRows}");
                 }
-                return affectedRows;
+                catch (Exception e)
+                {
+
+                    Console.WriteLine(e.Message);
+                }
+                Console.WriteLine($"Product removed from your cart {affectedRows}");
             }
+            return affectedRows;
         }
     }
 }

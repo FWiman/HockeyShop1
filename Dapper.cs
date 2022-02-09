@@ -72,25 +72,23 @@ namespace HockeyShop1
         public static int RemoveProductAdmin(int product)
         {
 
-            using (var db = new Models.HockeyShop1Context())
-            {
-                int affectedRows = 0;
-                var sql = $"DELETE FROM Products WHERE Id = {product}";
-                using (var connection = new SqlConnection(connString))
-                {
-                    try
-                    {
-                        affectedRows = connection.Execute(sql);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                    Console.WriteLine("Product removed");
 
+            int affectedRows = 0;
+            var sql = $"DELETE FROM Products WHERE Id = {product}";
+            using (var connection = new SqlConnection(connString))
+            {
+                try
+                {
+                    affectedRows = connection.Execute(sql);
                 }
-                return affectedRows;
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                Console.WriteLine("Product removed");
+
             }
+            return affectedRows;
         }
 
 
