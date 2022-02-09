@@ -41,7 +41,7 @@ namespace HockeyShop1
         /// </summary>
         /// <param name="prod"></param>
         /// <returns></returns>
-        public static int InsertProduct(Product prod)
+        public static int AddProductAdmin(Product prod)
         {
             int affectedRows = 0;
             var sql = $"INSERT INTO Products (CategoryId, BrandId, ModelName, Color, Price) VALUES ('{prod.CategoryId}', '{prod.BrandId}', '{prod.ModelName}', '{prod.Color}','{prod.Price}')";
@@ -57,10 +57,40 @@ namespace HockeyShop1
                 {
                     Console.WriteLine(e.Message);
                 }
-
-
+                Console.WriteLine("Product added!");
             }
             return affectedRows;
+        }
+
+
+
+        /// <summary>
+        /// Removes one product from productlist
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
+        public static int RemoveProductAdmin(int product)
+        {
+
+            using (var db = new Models.HockeyShop1Context())
+            {
+                int affectedRows = 0;
+                var sql = $"DELETE FROM Products WHERE Id = {product}";
+                using (var connection = new SqlConnection(connString))
+                {
+                    try
+                    {
+                        affectedRows = connection.Execute(sql);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    Console.WriteLine("Product removed");
+
+                }
+                return affectedRows;
+            }
         }
 
 

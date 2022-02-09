@@ -8,6 +8,7 @@ namespace HockeyShop1
 {
     class SortedProductQuery
     {
+        public int Ids { get; set; }
         public int PropID { get; set; }
         public string CategoryName { get; set; }
         public string BrandName { get; set; }

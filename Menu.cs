@@ -27,11 +27,8 @@ namespace HockeyShop1
                 Console.WriteLine("1. Show all products");
                 Console.WriteLine("2. More info about product");
                 Console.WriteLine("3. ShoppingCart");
-                Console.WriteLine("4. -");
-                Console.WriteLine("5. -");
-                Console.WriteLine("6. -");
-                Console.WriteLine("7. -");
-                Console.WriteLine("8. Avsluta");
+                Console.WriteLine("4. Admin");
+                Console.WriteLine("5. Avsluta");
                 Console.WriteLine("-----------------------------------");
 
                 try
@@ -41,7 +38,7 @@ namespace HockeyShop1
                 }
                 catch
                 {
-                    Console.WriteLine("Du måste skriva in en siffra");
+                    Console.WriteLine("Wrong input, choose between 1-5");
                 }
 
                 switch (val)
@@ -61,7 +58,7 @@ namespace HockeyShop1
                         Console.WriteLine("Your Shoppingcart!");
                         Console.WriteLine("------------------");
                         SeeShoppingCart();
-                        
+
 
 
                         int newMeny = 0;
@@ -80,7 +77,7 @@ namespace HockeyShop1
                             }
                             catch
                             {
-                                Console.WriteLine("Du måste skriva in en siffra");
+                                Console.WriteLine("Wrong input, choose between 1-4");
                             }
 
                             switch (newMeny)
@@ -91,17 +88,23 @@ namespace HockeyShop1
                                     Console.WriteLine("What product would you like to add? (Type in productID!)");
                                     var addToCart = Convert.ToInt32(Console.ReadLine());
                                     AddProductToShoppingCart(addToCart);
-                                    
+
                                     break;
-                                case 2: // REMOVE FROM SHOPPINGCART!
+                                case 2:
+                                    Console.Clear();
+                                    SeeShoppingCart();
+                                    Console.WriteLine("What product would u like to remove?");
+                                    var removeFromCart = Convert.ToInt32(Console.ReadLine());
+                                    RemoveProductFromCart(removeFromCart);
                                     break;
-                                case 3:// BUY PRODUCTS!!!
+                                case 3: // BUY PRODUCTS!!!
                                     break;
                                 case 4:
                                     BackToMainMenu();
                                     Console.Clear();
                                     break;
                                 default:
+                                    Console.WriteLine("Wrong input, choose between 1-4");
                                     break;
                             }
 
@@ -109,52 +112,91 @@ namespace HockeyShop1
                         }
                         while (newMeny != 4);
                         break;
-                    /*case 4:
-                        GetCities();
-                        Console.WriteLine("-------------------------------------");
-                        Console.WriteLine("Vilket parkeringshus vill du lägga till? Och i vilken stad vill du att det ska vara(StadsId) på varsin rad!");
-                        var newParkingHouse = new ParkingHouse
+                    case 4:
+                        Console.Clear();
+                        int loginAttempts = 0;
+
+                        for (int i = 0; i < 3; i++)
                         {
-                            HouseName = Console.ReadLine(),
-                            CityId = int.Parse(Console.ReadLine())
-                        };
-                        InsertParkingHouse(newParkingHouse);
+
+                            Console.WriteLine("Enter password");
+                            string password = Console.ReadLine();
+
+                            if (password != "FredrikFredric")
+                                loginAttempts++;
+                            else
+                                break;
+                        }
+                        if (loginAttempts > 2)
+                            Console.WriteLine("Login failure");
+                        else
+                            Console.WriteLine("Login successful");
+                        Console.ReadKey();
+
+                        int adminMenu = 0;
+
+                        do
+                        {
+                            Console.WriteLine("What would u like to do?");
+                            Console.WriteLine("1. Add a new product to the assortment");
+                            Console.WriteLine("2. Remove a product from the assortment");
+                            Console.WriteLine("3. Alter product in the assortment");
+                            Console.WriteLine("4. Exit");
+
+                            try
+                            {
+                                adminMenu = int.Parse(Console.ReadLine());
+                                loop = false;
+                            }
+                            catch
+                            {
+                                Console.WriteLine("Wrong input, choose between 1-4");
+                            }
+
+                            switch (adminMenu)
+                            {
+                                case 1:
+                                    Console.WriteLine("Please type in CategoryId, BrandId, ModelName, Color, Price");
+                                    var newProduct = new Models.Product
+                                    {
+                                        CategoryId = int.Parse(Console.ReadLine()),
+                                        BrandId = int.Parse(Console.ReadLine()),
+                                        ModelName = Console.ReadLine(),
+                                        Color = Console.ReadLine(),
+                                        Price = int.Parse(Console.ReadLine()),
+                                        Description = (Console.ReadLine())
+                                    };
+                                    Dapper.AddProductAdmin(newProduct);
+                                    break;
+                                case 2:
+                                    SeeAllProducts();
+                                    Console.WriteLine("\nPlease type in what product you want to remove (Use Id)");
+                                    var removeProduct = int.Parse(Console.ReadLine());
+                                    Dapper.RemoveProductAdmin(removeProduct);
+                                    break;
+                                case 3:
+                                    break;
+                                case 4:
+                                    break;
+                                default:
+                                    Console.WriteLine("Wrong input, choose between 1-4");
+                                    break;
+                            }
+
+                        } while (adminMenu != 4);
+
                         break;
+
                     case 5:
-                        GetParkingHouses();
-                        Console.WriteLine("------------------------------------");
-                        Console.WriteLine("Vilken siffra har din p-plats? Har den eluttag eller inte? Och vilket p-hus finns den i?(P-husID)");
-                        var newParkingSlot = new ParkingSlot
-                        {
-                            SlotNumber = int.Parse(Console.ReadLine()),
-                            ElectricOutlet = bool.Parse(Console.ReadLine()),
-                            ParkingHouseId = int.Parse(Console.ReadLine())
-                        };
-                        break;
-                    case 6:
-                        GetAllCars();
-                        break;
-                    case 7:
-                        Console.WriteLine("------------------------------------");
-                        Console.WriteLine("Vad för reg-nr är det?, Märke?, Färg?");
-                        var newCar = new Car
-                        {
-                            Plate = Console.ReadLine(),
-                            Make = Console.ReadLine(),
-                            Color = Console.ReadLine()
-                        };
-                        InsertCar(newCar);
-                        break; */
-                    case 8:
                         exit();
                         break;
 
                     default:
-                        Console.WriteLine("Du har tryckt på en knapp som inte finns att välja. Gör ett nytt val!");
+                        Console.WriteLine("Wrong input, choose between 1-5");
                         break;
                 }
 
-            } while (val != 8);
+            } while (val != 5);
         }
 
         /// <summary>
@@ -232,12 +274,12 @@ namespace HockeyShop1
                                     join prod in db.Products on item.ProductId equals prod.Id
                                     join category in db.Categories on item.Id equals category.Id
                                     join brand in db.Brands on item.Id equals brand.Id
-                                    select new SortedProductQuery { PropID = prod.Id, CategoryName = category.CategoryName, BrandName = brand.BrandName, ModelName = prod.ModelName, Price = prod.Price, Color = prod.Color };
+                                    select new SortedProductQuery { PropID = prod.Id, Ids = item.Id, CategoryName = category.CategoryName, BrandName = brand.BrandName, ModelName = prod.ModelName, Price = prod.Price, Color = prod.Color };
 
 
                 foreach (var p in shoppingCarts)
                 {
-                    Console.WriteLine($"Product ID: {p.PropID}\nCategory: {p.CategoryName}\nBrand: {p.BrandName}\nModel: {p.ModelName}\nPrice: {p.Price}kr\nColor: {p.Color}");
+                    Console.WriteLine($"Product ID: {p.PropID}\nID: {p.Ids}\nCategory: {p.CategoryName}\nBrand: {p.BrandName}\nModel: {p.ModelName}\nPrice: {p.Price}kr\nColor: {p.Color}");
                     Console.WriteLine("----------------------------------");
                 }
             }
@@ -255,8 +297,6 @@ namespace HockeyShop1
 
                     int affectedRows = 0;
                     var product = db.Products;
-                    var addtoCart = product.Where(product => product.Id == Convert.ToInt32(Console.ReadLine()));
-
                     var sql = $"INSERT INTO [Shoppin Cart] (CustomerId,ProductId)VALUES ({1},{addToCart1})";
 
                     using (var connection = new SqlConnection(connString))
@@ -264,11 +304,9 @@ namespace HockeyShop1
                         try
                         {
                             affectedRows = connection.Execute(sql);
-
                         }
                         catch (Exception e)
                         {
-
                             Console.WriteLine(e.Message);
                         }
                         Console.WriteLine($"Product added your cart!");
@@ -276,6 +314,38 @@ namespace HockeyShop1
                     }
                     return affectedRows;
                 }
+            }
+        }
+
+
+        /// <summary>
+        /// Removes a product from the shoppingcart
+        /// </summary>
+        /// <param name="removeFromCart"></param>
+        /// <returns></returns>
+        public static int RemoveProductFromCart(int removeFromCart)
+        {
+            using (var db = new Models.HockeyShop1Context())
+            {
+                int affectedRows = 0;
+                var removeProduct = db.ShoppinCarts;
+                var sql = $"DELETE FROM [Shoppin Cart] WHERE Id = {removeFromCart}";
+
+                using (var connection = new SqlConnection(connString))
+                {
+                    try
+                    {
+                        affectedRows = connection.Execute(sql);
+
+                    }
+                    catch (Exception e)
+                    {
+
+                        Console.WriteLine(e.Message);
+                    }
+                    Console.WriteLine($"Product removed from your cart {affectedRows}");
+                }
+                return affectedRows;
             }
         }
     }
