@@ -18,7 +18,6 @@ namespace HockeyShop1
         {
 
             int val = 0;
-            bool loop = true;
             do
             {
 
@@ -34,7 +33,6 @@ namespace HockeyShop1
                 try
                 {
                     val = int.Parse(Console.ReadLine());
-                    loop = false;
                 }
                 catch
                 {
@@ -73,7 +71,6 @@ namespace HockeyShop1
                             try
                             {
                                 newMeny = int.Parse(Console.ReadLine());
-                                loop = false;
                             }
                             catch
                             {
@@ -146,7 +143,6 @@ namespace HockeyShop1
                             try
                             {
                                 adminMenu = int.Parse(Console.ReadLine());
-                                loop = false;
                             }
                             catch
                             {
