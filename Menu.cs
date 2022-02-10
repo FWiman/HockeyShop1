@@ -22,7 +22,7 @@ namespace HockeyShop1
             {
 
                 Console.WriteLine("WELCOME");
-                Console.WriteLine("Choose between options 1-8");
+                Console.WriteLine("Choose between options 1-5");
                 Console.WriteLine("1. Show all products");
                 Console.WriteLine("2. More info about product");
                 Console.WriteLine("3. ShoppingCart");
@@ -57,8 +57,6 @@ namespace HockeyShop1
                         Console.WriteLine("------------------");
                         SeeShoppingCart();
 
-
-
                         int newMeny = 0;
                         do
                         {
@@ -66,7 +64,7 @@ namespace HockeyShop1
                             Console.WriteLine("What would u like to do?");
                             Console.WriteLine("1. Add product to Shoppingcart");
                             Console.WriteLine("2. Remove product from Shoppingcart");
-                            Console.WriteLine("3. -");
+                            Console.WriteLine("3. Buy your shoppingcart");
                             Console.WriteLine("4. Exit Shoppingcart");
                             try
                             {
@@ -94,7 +92,23 @@ namespace HockeyShop1
                                     var removeFromCart = Convert.ToInt32(Console.ReadLine());
                                     RemoveProductFromCart(removeFromCart);
                                     break;
-                                case 3: // BUY PRODUCTS!!!
+                                case 3:
+                                    Console.Clear();
+                                    SeeShoppingCart();
+                                    Console.WriteLine("Would you like to pay with card or swish?(1 for card and 2 for swish)");
+                                    var payment = int.Parse(Console.ReadLine());
+                                    if (payment == 1)
+                                    {
+                                        Console.WriteLine("Write your cardnumber and press enter to pay");
+                                        Console.ReadLine();
+                                        Payment();
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Write your phonenumber and press enter to pay");
+                                        Console.ReadLine();
+                                        Payment();
+                                    }
                                     break;
                                 case 4:
                                     BackToMainMenu();
@@ -104,7 +118,6 @@ namespace HockeyShop1
                                     Console.WriteLine("Wrong input, choose between 1-4");
                                     break;
                             }
-
 
                         }
                         while (newMeny != 4);
@@ -137,8 +150,11 @@ namespace HockeyShop1
                             Console.WriteLine("What would u like to do?");
                             Console.WriteLine("1. Add a new product to the assortment");
                             Console.WriteLine("2. Remove a product from the assortment");
-                            Console.WriteLine("3. Alter product in the assortment");
-                            Console.WriteLine("4. Exit");
+                            Console.WriteLine("3. Alter price in the assortment");
+                            Console.WriteLine("4. Alter Modelname in the assortment");
+                            Console.WriteLine("5. Alter description in the assortment");
+                            Console.WriteLine("6. Alter category in the assortment");
+                            Console.WriteLine("7. Exit");
 
                             try
                             {
@@ -171,15 +187,38 @@ namespace HockeyShop1
                                     Dapper.RemoveProductAdmin(removeProduct);
                                     break;
                                 case 3:
+                                    SeeAllProducts();
+                                    Console.WriteLine("Change price on a product(Choose product with id)");
+                                    var updatePriceOn = Convert.ToInt32(Console.ReadLine());
+                                    Console.WriteLine("New price:");
+                                    var newPriceOfProduct = Convert.ToInt32(Console.ReadLine());
+                                    ChangeProductPrice(newPriceOfProduct, updatePriceOn);
                                     break;
                                 case 4:
+                                    SeeAllProducts();
+                                    Console.WriteLine("Change modelname on a product(Choose product with id)");
+                                    var updateId = Convert.ToInt32(Console.ReadLine());
+                                    Console.WriteLine("New name:");
+                                    var newName = Console.ReadLine();
+                                    ChangeProductModelName(newName, updateId);
+                                    break;
+                                case 5:
+                                    SeeAllProducts();
+                                    Console.WriteLine("Change description on a product(Choose product with id)");
+                                    var updatedesp = Convert.ToInt32(Console.ReadLine());
+                                    Console.WriteLine("Write new description:");
+                                    var newDesp = Console.ReadLine();
+                                    ChangeProductDescription(updatedesp, newDesp);
+                                    break;
+                                case 6:
+                                    BackToMainMenu();
                                     break;
                                 default:
                                     Console.WriteLine("Wrong input, choose between 1-4");
                                     break;
                             }
 
-                        } while (adminMenu != 4);
+                        } while (adminMenu != 6);
 
                         break;
 
@@ -337,6 +376,120 @@ namespace HockeyShop1
                     Console.WriteLine(e.Message);
                 }
                 Console.WriteLine($"Product removed from your cart {affectedRows}");
+            }
+            return affectedRows;
+        }
+
+
+        /// <summary>
+        /// Paying (emptying shoppingcart)
+        /// </summary>
+        /// <returns></returns>
+        public static int Payment()
+        {
+            int affectedRows = 0;
+            var sql = $"DELETE FROM [Shoppin Cart] WHERE Id BETWEEN 1 and 100";
+
+            using (var connection = new SqlConnection(connString))
+            {
+                try
+                {
+                    affectedRows = connection.Execute(sql);
+
+                }
+                catch (Exception e)
+                {
+
+                    Console.WriteLine(e.Message);
+                }
+                Console.WriteLine($"Thanks you shopping with us. Welcome again!");
+            }
+            return affectedRows;
+        }
+
+
+        /// <summary>
+        /// Admin (Alter Price)
+        /// </summary>
+        /// <param name="newPrice"></param>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public static int ChangeProductPrice(float newPrice, int Id)
+        {
+            int affectedRows = 0;
+
+            var sql = $"Update Products SET Price = ('{newPrice}') WHERE Id = ('{Id}')";
+
+            using (var connection = new SqlConnection(connString))
+            {
+                try
+                {
+                    affectedRows = connection.Execute(sql);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                Console.WriteLine($"Price updated ");
+            }
+            return affectedRows;
+        }
+
+
+
+        /// <summary>
+        /// Admin (Alter Modelname)
+        /// </summary>
+        /// <param name="newNameOn"></param>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public static int ChangeProductModelName(string newNameOn, int Id)
+        {
+            int affectedRows = 0;
+            var sql = $"Update Products SET ModelName = ('{newNameOn}') WHERE Id = ('{Id}')";
+
+            using (var connection = new SqlConnection(connString))
+            {
+                try
+                {
+                    affectedRows = connection.Execute(sql);
+
+                }
+                catch (Exception e)
+                {
+
+                    Console.WriteLine(e.Message);
+                }
+                Console.WriteLine($"Modelname updated ");
+            }
+            return affectedRows;
+
+        }
+
+
+
+        /// <summary>
+        /// Admin (Alter Description)
+        /// </summary>
+        /// <param name="updateproduct"></param>
+        /// <returns></returns>
+        public static int ChangeProductDescription(int updateproduct, string newDesp)
+        {
+
+            int affectedRows = 0;
+            var sql = $"Update Products SET Description = {updateproduct} WHERE Id = {updateproduct}";
+
+            using (var connection = new SqlConnection(connString))
+            {
+                try
+                {
+                    affectedRows = connection.Execute(sql);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                Console.WriteLine($"Description updated ");
             }
             return affectedRows;
         }

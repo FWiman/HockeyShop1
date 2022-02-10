@@ -9,7 +9,7 @@ namespace HockeyShop1
 {
     class Dapper
     {
-        static string connString = "data source=.\\SQLEXPRESS; initial catalog=HockeyShop1; persist security info=true; Integrated Security=true";
+        static readonly string connString = "data source=.\\SQLEXPRESS; initial catalog=HockeyShop1; persist security info=true; Integrated Security=true";
 
         /// <summary>
         /// Shows existing products
