@@ -211,6 +211,15 @@ namespace HockeyShop1
                                     ChangeProductDescription(updatedesp, newDesp);
                                     break;
                                 case 6:
+                                    SeeAllProducts();
+                                    Console.WriteLine("Change category on a product(Choose product with id)");
+                                    var product = Convert.ToInt32(Console.ReadLine());
+                                    SeeProductsForChangeCategory();
+                                    Console.WriteLine("Choose wich category the product should have:");
+                                    var newCategory = Convert.ToInt32(Console.ReadLine());
+                                    ChangeProductCategory(newCategory, product);
+                                    break;
+                                case 7:
                                     BackToMainMenu();
                                     break;
                                 default:
@@ -218,7 +227,7 @@ namespace HockeyShop1
                                     break;
                             }
 
-                        } while (adminMenu != 6);
+                        } while (adminMenu != 7);
 
                         break;
 
@@ -490,6 +499,52 @@ namespace HockeyShop1
                     Console.WriteLine(e.Message);
                 }
                 Console.WriteLine($"Description updated ");
+            }
+            return affectedRows;
+        }
+
+
+
+        /// <summary>
+        /// Admin (Shows Category choices)
+        /// </summary>
+        public static void SeeProductsForChangeCategory()
+        {
+            using (var db = new Models.HockeyShop1Context())
+            {
+                var change = from category in db.Categories
+                             select category;
+                foreach (var c in change)
+                {
+                    Console.WriteLine($"{c.Id} {c.CategoryName}");
+                }
+            }
+        }
+
+
+
+        /// <summary>
+        /// Admin (Alter Category)
+        /// </summary>
+        /// <param name="newId"></param>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        public static int ChangeProductCategory(int newId, int productId)
+        {
+            int affectedRows = 0;
+            var sql = $"Update Products SET CategoryId = ('{newId}') WHERE Id = ('{productId}')";
+
+            using (var connection = new SqlConnection(connString))
+            {
+                try
+                {
+                    affectedRows = connection.Execute(sql);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                Console.WriteLine($"Category updated ");
             }
             return affectedRows;
         }
