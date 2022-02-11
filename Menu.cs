@@ -27,7 +27,8 @@ namespace HockeyShop1
                 Console.WriteLine("2. More info about product");
                 Console.WriteLine("3. ShoppingCart");
                 Console.WriteLine("4. Admin");
-                Console.WriteLine("5. Avsluta");
+                Console.WriteLine("5. Search");
+                Console.WriteLine("6. Avsluta");
                 Console.WriteLine("-----------------------------------");
 
                 try
@@ -36,7 +37,7 @@ namespace HockeyShop1
                 }
                 catch
                 {
-                    Console.WriteLine("Wrong input, choose between 1-5");
+                    Console.WriteLine("Wrong input, choose between 1-6");
                 }
 
                 switch (val)
@@ -228,11 +229,15 @@ namespace HockeyShop1
                             }
 
                         } while (adminMenu != 7);
-
                         break;
-
                     case 5:
-                        exit();
+                        Console.Clear();
+                        Console.WriteLine("Tpye in your search word");
+                        SearchAndShowProducts();
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+                    case 6:exit();
                         break;
 
                     default:
@@ -240,7 +245,7 @@ namespace HockeyShop1
                         break;
                 }
 
-            } while (val != 5);
+            } while (val != 6);
         }
 
         /// <summary>
@@ -548,6 +553,32 @@ namespace HockeyShop1
             }
             return affectedRows;
         }
+
+
+
+         
+        public static void SearchAndShowProducts()
+        {
+            var search = Console.ReadLine();
+
+            using (var db = new Models.HockeyShop1Context())
+            {
+                var products = db.Products;
+                var productsWithShortName = from prod in products
+                                            where 
+                                            prod.ModelName.Contains(search)
+                                            orderby prod.ModelName
+                                            select "Id: " + prod.Id + " " + "\tName: " + prod.ModelName.ToUpper() + "\tPrice: (" + prod.Price + " kr)";
+
+                foreach (var prodList in productsWithShortName)
+                {
+                    Console.WriteLine(prodList);
+                }
+
+            }
+
+        }
     }
 }
+
 
