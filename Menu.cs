@@ -16,11 +16,9 @@ namespace HockeyShop1
         /// </summary>
         public void Run()
         {
-
             int val = 0;
             do
             {
-
                 Console.WriteLine("WELCOME");
                 Console.WriteLine("Choose between options 1-5");
                 Console.WriteLine("1. Show all products");
@@ -89,7 +87,7 @@ namespace HockeyShop1
                                 case 2:
                                     Console.Clear();
                                     SeeShoppingCart();
-                                    Console.WriteLine("What product would u like to remove?");
+                                    Console.WriteLine("What product would u like to remove?(Type ID)");
                                     var removeFromCart = Convert.ToInt32(Console.ReadLine());
                                     RemoveProductFromCart(removeFromCart);
                                     break;
@@ -119,7 +117,6 @@ namespace HockeyShop1
                                     Console.WriteLine("Wrong input, choose between 1-4");
                                     break;
                             }
-
                         }
                         while (newMeny != 4);
                         break;
@@ -244,7 +241,6 @@ namespace HockeyShop1
                         Console.WriteLine("Wrong input, choose between 1-5");
                         break;
                 }
-
             } while (val != 6);
         }
 
@@ -319,14 +315,13 @@ namespace HockeyShop1
             {
                 var products = db.Products;
 
-                var shoppingCarts = from item in db.ShoppinCarts
-                                    join prod in db.Products on item.ProductId equals prod.Id
-                                    join category in db.Categories on item.Id equals category.Id
-                                    join brand in db.Brands on item.Id equals brand.Id
-                                    select new SortedProductQuery { PropID = prod.Id, Ids = item.Id, CategoryName = category.CategoryName, BrandName = brand.BrandName, ModelName = prod.ModelName, Price = prod.Price, Color = prod.Color };
+                var shoppingCart = from item in db.ShoppinCarts
+                                   join prod in db.Products on item.ProductId equals prod.Id
+                                   join category in db.Categories on prod.CategoryId equals category.Id
+                                   join brand in db.Brands on prod.BrandId equals brand.Id
+                                   select new SortedProductQuery { PropID = prod.Id, Ids = item.Id, CategoryName = category.CategoryName, BrandName = brand.BrandName, ModelName = prod.ModelName, Price = prod.Price, Color = prod.Color };
 
-
-                foreach (var p in shoppingCarts)
+                foreach (var p in shoppingCart)
                 {
                     Console.WriteLine($"Product ID: {p.PropID}\nID: {p.Ids}\nCategory: {p.CategoryName}\nBrand: {p.BrandName}\nModel: {p.ModelName}\nPrice: {p.Price}kr\nColor: {p.Color}");
                     Console.WriteLine("----------------------------------");
@@ -556,7 +551,9 @@ namespace HockeyShop1
 
 
 
-         
+         /// <summary>
+         /// Search method
+         /// </summary>
         public static void SearchAndShowProducts()
         {
             var search = Console.ReadLine();
@@ -565,10 +562,11 @@ namespace HockeyShop1
             {
                 var products = db.Products;
                 var productsWithShortName = from prod in products
+                                            join b in db.Brands on prod.BrandId equals b.Id
                                             where 
                                             prod.ModelName.Contains(search)
                                             orderby prod.ModelName
-                                            select "Id: " + prod.Id + " " + "\tName: " + prod.ModelName.ToUpper() + "\tPrice: (" + prod.Price + " kr)";
+                                            select "Id: " + prod.Id + "\tCategory: " +prod.Category.CategoryName + "\tBrand: " + prod.Brand.BrandName + "\tName: " + prod.ModelName.ToUpper() + "\tPrice: (" + prod.Price + " kr)";
 
                 foreach (var prodList in productsWithShortName)
                 {
