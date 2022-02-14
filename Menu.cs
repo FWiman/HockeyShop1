@@ -9,7 +9,7 @@ namespace HockeyShop1
     class Menu
     {
 
-        static string connString = "data source=.\\SQLEXPRESS; initial catalog=HockeyShop1; persist security info=true; Integrated Security=true";
+        static string connString = "Server=tcp:newtonservertest.database.windows.net,1433;Initial Catalog=DemoDB;Persist Security Info=False;User ID=serveradmin;Password=Liverpool5487;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         /// <summary>
         /// The Menu
@@ -82,8 +82,8 @@ namespace HockeyShop1
                                     Console.WriteLine("What product would you like to add? (Type in productID!)");
                                     var addToCart = Convert.ToInt32(Console.ReadLine());
                                     AddProductToShoppingCart(addToCart);
-
                                     break;
+
                                 case 2:
                                     Console.Clear();
                                     SeeShoppingCart();
@@ -91,6 +91,7 @@ namespace HockeyShop1
                                     var removeFromCart = Convert.ToInt32(Console.ReadLine());
                                     RemoveProductFromCart(removeFromCart);
                                     break;
+
                                 case 3:
                                     Console.Clear();
                                     SeeShoppingCart();
@@ -109,10 +110,12 @@ namespace HockeyShop1
                                         Payment();
                                     }
                                     break;
+
                                 case 4:
                                     BackToMainMenu();
                                     Console.Clear();
                                     break;
+
                                 default:
                                     Console.WriteLine("Wrong input, choose between 1-4");
                                     break;
@@ -120,6 +123,7 @@ namespace HockeyShop1
                         }
                         while (newMeny != 4);
                         break;
+
                     case 4:
                         Console.Clear();
                         int loginAttempts = 0;
@@ -227,6 +231,7 @@ namespace HockeyShop1
 
                         } while (adminMenu != 7);
                         break;
+
                     case 5:
                         Console.Clear();
                         Console.WriteLine("Tpye in your search word");
@@ -234,6 +239,7 @@ namespace HockeyShop1
                         Console.ReadKey();
                         Console.Clear();
                         break;
+
                     case 6:exit();
                         break;
 
@@ -321,12 +327,14 @@ namespace HockeyShop1
                                    join brand in db.Brands on prod.BrandId equals brand.Id
                                    select new SortedProductQuery { PropID = prod.Id, Ids = item.Id, CategoryName = category.CategoryName, BrandName = brand.BrandName, ModelName = prod.ModelName, Price = prod.Price, Color = prod.Color };
 
+
                 foreach (var p in shoppingCart)
                 {
                     Console.WriteLine($"Product ID: {p.PropID}\nID: {p.Ids}\nCategory: {p.CategoryName}\nBrand: {p.BrandName}\nModel: {p.ModelName}\nPrice: {p.Price}kr\nColor: {p.Color}");
                     Console.WriteLine("----------------------------------");
                 }
             }
+
         }
 
 
