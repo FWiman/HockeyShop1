@@ -9,32 +9,7 @@ namespace HockeyShop1
 {
     class Dapper
     {
-        static readonly string connString = "data source=.\\SQLEXPRESS; initial catalog=HockeyShop1; persist security info=true; Integrated Security=true";
-
-        /// <summary>
-        /// Shows existing products
-        /// </summary>
-        /// <returns></returns>
-        public static List<Product> GetAllProducts()
-        {
-            var product = new List<Product>();
-
-
-
-            var sql = "SELECT * FROM Products";
-
-            using (var connection = new SqlConnection(connString))
-            {
-                connection.Open();
-                product = connection.Query<Product>(sql).ToList();
-
-            }
-
-
-            return product;
-
-        }
-
+        static string connString = "Server=tcp:newtonservertest.database.windows.net,1433;Initial Catalog=DemoDB;Persist Security Info=False;User ID=serveradmin;Password=Liverpool5487;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         /// <summary>
         /// Inserts one new product to the productlist
@@ -91,24 +66,5 @@ namespace HockeyShop1
             return affectedRows;
         }
 
-
-
-        /// <summary>
-        /// Updates a kolumn
-        /// </summary>
-        /// <param name="newPrice"></param>
-        /// <param name="productId"></param>
-        /// <returns></returns>
-        public static int UpdateProduct(int newPrice, int productId)
-        {
-            int affectedRows = 0;
-            var sql = $"UPDATE Products SET Price = {newPrice} WHERE Id = {productId}";
-            using (var connection = new SqlConnection(connString))
-            {
-                affectedRows = connection.Execute(sql);
-            }
-            return affectedRows;
-        }
     }
-
 }

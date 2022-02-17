@@ -20,7 +20,7 @@ namespace HockeyShop1
             do
             {
                 Console.WriteLine("WELCOME");
-                Console.WriteLine("Choose between options 1-5");
+                Console.WriteLine("Choose between options 1-6");
                 Console.WriteLine("1. Show all products");
                 Console.WriteLine("2. More info about product");
                 Console.WriteLine("3. ShoppingCart");
@@ -54,7 +54,7 @@ namespace HockeyShop1
                         Console.Clear();
                         Console.WriteLine("Your Shoppingcart!");
                         Console.WriteLine("------------------");
-                        SeeShoppingCart();
+                        SeeShoppingCart();                      
 
                         int newMeny = 0;
                         do
@@ -82,6 +82,7 @@ namespace HockeyShop1
                                     Console.WriteLine("What product would you like to add? (Type in productID!)");
                                     var addToCart = Convert.ToInt32(Console.ReadLine());
                                     AddProductToShoppingCart(addToCart);
+                                    SeeShoppingCart();
                                     break;
 
                                 case 2:
@@ -90,6 +91,7 @@ namespace HockeyShop1
                                     Console.WriteLine("What product would u like to remove?(Type ID)");
                                     var removeFromCart = Convert.ToInt32(Console.ReadLine());
                                     RemoveProductFromCart(removeFromCart);
+                                    SeeShoppingCart();
                                     break;
 
                                 case 3:
@@ -164,7 +166,7 @@ namespace HockeyShop1
                             }
                             catch
                             {
-                                Console.WriteLine("Wrong input, choose between 1-4");
+                                Console.WriteLine("Wrong input, choose between 1-7");
                             }
 
                             switch (adminMenu)
@@ -240,7 +242,8 @@ namespace HockeyShop1
                         Console.Clear();
                         break;
 
-                    case 6:exit();
+                    case 6:
+                        Exit();
                         break;
 
                     default:
@@ -253,7 +256,7 @@ namespace HockeyShop1
         /// <summary>
         /// Ending program
         /// </summary>
-        public void exit()
+        public static void Exit()
         {
             Console.WriteLine("Hejdå!");
         }
@@ -262,7 +265,7 @@ namespace HockeyShop1
         /// <summary>
         /// Ending Shoppingcart
         /// </summary>
-        public void BackToMainMenu()
+        public static void BackToMainMenu()
         {
 
         }
@@ -327,14 +330,12 @@ namespace HockeyShop1
                                    join brand in db.Brands on prod.BrandId equals brand.Id
                                    select new SortedProductQuery { PropID = prod.Id, Ids = item.Id, CategoryName = category.CategoryName, BrandName = brand.BrandName, ModelName = prod.ModelName, Price = prod.Price, Color = prod.Color };
 
-
                 foreach (var p in shoppingCart)
                 {
                     Console.WriteLine($"Product ID: {p.PropID}\nID: {p.Ids}\nCategory: {p.CategoryName}\nBrand: {p.BrandName}\nModel: {p.ModelName}\nPrice: {p.Price}kr\nColor: {p.Color}");
                     Console.WriteLine("----------------------------------");
                 }
             }
-
         }
 
 
@@ -559,9 +560,9 @@ namespace HockeyShop1
 
 
 
-         /// <summary>
-         /// Search method
-         /// </summary>
+        /// <summary>
+        /// Search method
+        /// </summary>
         public static void SearchAndShowProducts()
         {
             var search = Console.ReadLine();
@@ -571,10 +572,10 @@ namespace HockeyShop1
                 var products = db.Products;
                 var productsWithShortName = from prod in products
                                             join b in db.Brands on prod.BrandId equals b.Id
-                                            where 
+                                            where
                                             prod.ModelName.Contains(search)
                                             orderby prod.ModelName
-                                            select "Id: " + prod.Id + "\tCategory: " +prod.Category.CategoryName + "\tBrand: " + prod.Brand.BrandName + "\tName: " + prod.ModelName.ToUpper() + "\tPrice: (" + prod.Price + " kr)";
+                                            select "Id: " + prod.Id + "\tCategory: " + prod.Category.CategoryName + "\tBrand: " + prod.Brand.BrandName + "\tName: " + prod.ModelName.ToUpper() + "\tPrice: (" + prod.Price + " kr)";
 
                 foreach (var prodList in productsWithShortName)
                 {
